@@ -1,5 +1,4 @@
 import numpy as np
-from itertools import combinations
 from body import Body, System
 from matplotlib import pyplot as plt
 
@@ -18,11 +17,3 @@ positions_2 = np.array(system.bodies[1].positions)
 plt.scatter(positions_1[:, 0], positions_1[:, 1])
 plt.scatter(positions_2[:, 0], positions_2[:, 1])
 plt.show()
-
-
-
-
-
-
-
-
