@@ -17,7 +17,9 @@ class Body:
 
     related_bodies = None
 
-    def __init__(self, mass, position, velocity):
+    _continue_condition = None
+
+    def __init__(self, mass, position, velocity, continue_condition):
         self.mass = mass
         self.positions = []
         self.velocities = []
@@ -27,6 +29,8 @@ class Body:
         self.positions.append(self.position)
         self.velocity = np.array(velocity, dtype=float)
         self.velocities.append(self.velocity)
+
+        self._continue_condition = continue_condition
 
     def _magnitude(self, body):
         return np.sum((body.position - self.position)**2)
@@ -54,7 +58,7 @@ class Body:
         self.positions.append(self.position)
 
         net_force = np.sum((net_force_per_mass * self.mass)**2)
-        return net_force > 0.0001
+        return self._continue_condition(self, net_force)
 
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -62,11 +66,13 @@ class Body:
 
 class System:
 
+    label = None
     bodies = []
 
-    def __init__(self, bodies):
+    def __init__(self, label, bodies):
         combos = list(combinations(range(len(bodies)), 2))
         self.bodies = bodies
+        self.label = label
 
         for combo in combos:
             bodies[combo[0]].add_related_body(bodies[combo[1]])
